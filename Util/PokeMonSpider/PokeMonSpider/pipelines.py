@@ -10,21 +10,17 @@ from items import PokemonDataItem, PokemonSkillItem
 class PokemonspiderPipeline(object):
 
 	def __init__(self):
-		self.writer = csv.writer(file('pokemon.csv', 'w'))
-		# self.fieldnames = ["Id","Name","Attack","Defense","Sp_attack","Sp_defense","Speed","Total"]
-		# self.writer = csv.DictWriter(file('pokemon.csv'), fieldnames=self.fieldnames)
-		self.skill_writer = csv.writer(file('skills.csv', 'w'))
+		self.pokemon_writer = csv.writer(file('outputs/pokemon.csv', 'w'))
+		self.skill_writer = csv.writer(file('outputs/skills.csv', 'w'))
 
 	def process_item(self, item, spider):
 		if isinstance(item, PokemonDataItem):
-			self.writer.writerow([item["Id"],item["Name"],item["HP"],item["Attack"],item["Defense"], \
+			self.pokemon_writer.writerow([item["Id"],item["Name"],item["HP"],item["Attack"],item["Defense"], \
 				item["Sp_attack"],item["Sp_defense"],item["Speed"],item["Total"]])
-		# self.writer.writerow([item["Id"], item["Name"],item["Attack"],item["Defense"]])
 		elif isinstance(item, PokemonSkillItem):
-			l = [item["Id"],item["Name"]]
+			row = [item["Id"],item["Name"]]
 			skills = list(item["Skills"])
 			skills.sort()
-			l.extend(skills)
-			self.skill_writer.writerow(l)
-			# self.skill_writer.writerow(list(item["Skills"]))
+			row.extend(skills)
+			self.skill_writer.writerow(row)
 		return item
